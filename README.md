@@ -80,4 +80,4 @@ php artisan test
 ```
 
 ## Postman collection
-[Leaderboard Postman Collection download link](https://drive.google.com/file/d/1uKcpn9ePBoPZlK3eq3r-bYy6De3dvOoW/view?usp=sharing)
+[Leaderboard Postman Collection download link](https://drive.google.com/file/d/1xa8p2vt-hdz-JGwlE9RThq0YWAzz02Oi/view?usp=sharing)
