@@ -53,6 +53,10 @@ json data sample:
 }
 </pre>
 
+**Note:**
+
+`Use this IP for testing purpose: 54.164.156.234`
+
 ## Routes
 
 ```
