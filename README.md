@@ -72,12 +72,12 @@ Route::prefix('user')->group(function () {
 });
 ```
 
-### Laravel artisan commands
+## Laravel artisan commands
 
 ```
 php artisan migrate
 php artisan test 
 ```
 
-### Postman collection
+## Postman collection
 [Leaderboard Postman Collection download link](https://drive.google.com/file/d/1uKcpn9ePBoPZlK3eq3r-bYy6De3dvOoW/view?usp=sharing)
