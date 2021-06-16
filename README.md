@@ -1,62 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Create an API for leaderboard application
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple example of Leaderboard with a RESTful API in Laravel Framework 8.46.0 and PHP 7.4.20
 
-## About Laravel
+## Endpoints
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**1. Get all leaders:**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+`GET /api/user/leaderboard`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**2. Sort all leaders by points:**
 
-## Learning Laravel
+`GET /api/user/leaderboard/order`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**3. Get a single leader by id:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+`GET /api/user/leaderboard/{id}`
 
-## Laravel Sponsors
+**4. Create a new leader:**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+`POST /api/user/leaderboard`
+<pre>
+json data sample:
+{
+    "name": "Mike",
+    "age": 26,
+    "address": "1657 27 ST Surrey V3E 8R2"
+}
+</pre>
 
-### Premium Partners
+**5. Increase one point for a leader:**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+`POST /api/user/leaderboard/increase/{id}`
 
-## Contributing
+**6. Decrease one point for a leader:**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+`POST /api/user/leaderboard/decrease/{id}`
 
-## Code of Conduct
+**7. Delete a leader:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+`DELETE /api/user/leaderboard/{id}`
 
-## Security Vulnerabilities
+**8. Update a leader:**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+`PUT /api/user/leaderboard/{id}`
+<pre>
+json data sample:
+{
+    "name": "Mike Carter",
+    "age": 28,
+    "points": 5,
+    "address": "1356 160 ST Surrey V5E 6R3"
+}
+</pre>
 
-## License
+**Note:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+`Use this IP for testing purpose: 54.164.156.234`
+
+## Routes
+
+```
+Route::prefix('user')->group(function () {
+    Route::get('leaderboard', [LeaderController::class,'index']);
+    Route::get('leaderboard/order', [LeaderController::class,'order']);
+    Route::get('leaderboard/{id}', [LeaderController::class,'show']);
+    Route::post('leaderboard', [LeaderController::class,'create']);
+    Route::post('leaderboard/increase/{id}', [LeaderController::class,'increase']);
+    Route::post('leaderboard/decrease/{id}', [LeaderController::class,'decrease']);
+    Route::delete('leaderboard/{id}', [LeaderController::class,'delete']);
+    Route::put('leaderboard/{id}', [LeaderController::class,'update']);
+});
+```
+
+## Laravel artisan commands
+
+```
+php artisan migrate
+php artisan test 
+```
+
+## Postman collection
+[Leaderboard Postman Collection download link](https://drive.google.com/file/d/1uKcpn9ePBoPZlK3eq3r-bYy6De3dvOoW/view?usp=sharing)
