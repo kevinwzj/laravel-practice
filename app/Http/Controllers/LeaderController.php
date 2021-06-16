@@ -155,9 +155,9 @@ class LeaderController extends Controller
             }
             $leader->fill($request->all())->save();
             $message = 'Leader No.' . $id . ' has been updated.';
-            return response()->json([$message], self::SUCCESS_STATUS_CODE);
+            return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
         } catch(Exception $exception) {
-            return response()->json([$exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
+            return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
     }
 
