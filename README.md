@@ -149,4 +149,4 @@ php artisan test tests/Feature/Http/Controllers/LeaderControllerTest.php
 ```
 
 ## Postman collection
-[Leaderboard Postman Collection download link](https://drive.google.com/file/d/1xa8p2vt-hdz-JGwlE9RThq0YWAzz02Oi/view?usp=sharing)
+[Leaderboard Postman Collection download link](https://drive.google.com/file/d/1Hc_sp7ezLi8JcKU75Cc5NpqDzfpfhETe/view?usp=sharing)
