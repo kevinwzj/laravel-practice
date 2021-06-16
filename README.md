@@ -4,23 +4,57 @@ A simple example of Leaderboard with a RESTful API in Laravel Framework 8.46.0 a
 
 ## Endpoints
 
-**1. Get all leaders:**
-
-`GET /api/user/leaderboard`
-
-**2. Sort all leaders by points:**
+**1. Sort all leaders by points:**
 
 `GET /api/user/leaderboard/order`
+<pre>
+Response json data sample:
+[
+    {
+        "id": 3,
+        "name": "Tim",
+        "age": "26",
+        "points": 8,
+        "address": "1618 29 ST Surrey V7E 8R2",
+        "created_at": "2021-06-16T21:47:07.000000Z",
+        "updated_at": "2021-06-16T22:27:22.000000Z"
+    },
+    {
+        "id": 2,
+        "name": "Kevin",
+        "age": "32",
+        "points": 5,
+        "address": "16409 25 ST Surrey V6E 8E3",
+        "created_at": "2021-06-16T21:46:31.000000Z",
+        "updated_at": "2021-06-16T21:47:00.000000Z"
+    }
+]
+</pre>
 
-**3. Get a single leader by id:**
+**2. Get a single leader by id:**
 
 `GET /api/user/leaderboard/{id}`
 
-**4. Create a new leader:**
+<pre>
+Response json data sample:
+[
+    {
+        "id": 3,
+        "name": "Tim",
+        "age": "26",
+        "points": 8,
+        "address": "1618 29 ST Surrey V7E 8R2",
+        "created_at": "2021-06-16T21:47:07.000000Z",
+        "updated_at": "2021-06-16T22:27:22.000000Z"
+    }
+]
+</pre>
+
+**3. Create a new leader:**
 
 `POST /api/user/leaderboard`
 <pre>
-json data sample:
+Request json data sample:
 {
     "name": "Mike",
     "age": 26,
@@ -28,29 +62,64 @@ json data sample:
 }
 </pre>
 
-**5. Increase one point for a leader:**
+<pre>
+Response json data sample:
+{
+    "message": "Leader Mike has been created."
+}
+</pre>
+
+**4. Increase one point for a leader:**
 
 `POST /api/user/leaderboard/increase/{id}`
 
-**6. Decrease one point for a leader:**
+<pre>
+Response json data sample:
+{
+    "message": "The points of Leader Tim has been increased by 1, equals to 8"
+}
+</pre>
+
+**5. Decrease one point for a leader:**
 
 `POST /api/user/leaderboard/decrease/{id}`
 
-**7. Delete a leader:**
+<pre>
+Response json data sample:
+{
+    "message": "The points of Leader Tim has been decreased by 1, equals to 3"
+}
+</pre>
+
+**6. Delete a leader:**
 
 `DELETE /api/user/leaderboard/{id}`
 
-**8. Update a leader:**
+<pre>
+Response json data sample:
+{
+    "message": "Kevin has been deleted from leaderboard."
+}
+</pre>
+
+**7. Update a leader:**
 
 `PUT /api/user/leaderboard/{id}`
 <pre>
-json data sample:
+Request json data sample:
 {
     "name": "Mike Carter",
     "age": 28,
     "points": 5,
     "address": "1356 160 ST Surrey V5E 6R3"
 }
+</pre>
+
+<pre>
+Response json data sample:
+[
+    "Leader No.2 has been updated."
+]
 </pre>
 
 **Note:**
@@ -76,7 +145,7 @@ Route::prefix('user')->group(function () {
 
 ```
 php artisan migrate
-php artisan test 
+php artisan test tests/Feature/Http/Controllers/LeaderControllerTest.php
 ```
 
 ## Postman collection
