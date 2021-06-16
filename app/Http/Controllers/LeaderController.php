@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  */
 class LeaderController extends Controller
 {
+    const SUCCESS_STATUS_CODE = 200;
+    const BAD_REQUEST_STATUS_CODE = 400;
+    const NO_FOUND_STATUS_CODE = 404;
+
     /**
      * @return Leaderboard[]|\Illuminate\Database\Eloquent\Collection
      */
@@ -23,11 +27,11 @@ class LeaderController extends Controller
     }
 
     /**
-     * @return Leaderboard[]|\Illuminate\Database\Eloquent\Collection
+     * @return mixed
      */
     public function order()
     {
-        return Leaderboard::all()->sortByDesc("points");
+        return Leaderboard::orderBy("points", 'DESC')->orderBy("id", 'ASC')->get();
     }
 
     /**
@@ -39,7 +43,8 @@ class LeaderController extends Controller
         try {
             return Leaderboard::findOrFail($id);
         } catch (ModelNotFoundException $exception) {
-            return response()->json(['Leader No.' . $id . ' does not exist'], 200);
+            $message = 'Leader No.' . $id . ' does not exist';
+            return response()->json(['message' => $message], self::NO_FOUND_STATUS_CODE);
         }
     }
 
@@ -52,15 +57,15 @@ class LeaderController extends Controller
         $data = $request->all();
         $validation = $this->validateNewLeaderInfo($request->all());
         if (!$validation['result']) {
-            return response()->json([$validation['message']], 200);
+            return response()->json(['message' => $validation['message']], self::BAD_REQUEST_STATUS_CODE);
         }
         $data['points'] = 0;
         try {
             Leaderboard::create($data);
             $message = "Leader " . $data['name'] . " has been created.";
-            return response()->json([$message], 200);
+            return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
         } catch(Exception $exception) {
-            return response()->json([$exception->getMessage()], $exception->getCode());
+            return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
     }
 
@@ -71,13 +76,17 @@ class LeaderController extends Controller
     public function increase($id): JsonResponse
     {
         try {
-            $leader = Leaderboard::findOrFail($id);
+            $leader = Leaderboard::find($id);
+            if (empty($leader->id)) {
+                $message = 'Increasing failed, No.' . $id . ' does not exist.';
+                return response()->json(['message' => $message], self::NO_FOUND_STATUS_CODE);
+            }
             $leader->points++;
             $leader->save();
             $message = "The points of Leader " . $leader->name . " has been increased by 1, equals to " . $leader->points;
-            return response()->json([$message], 200);
-        } catch (ModelNotFoundException $exception) {
-            return response()->json(['Increasing failed, No.' . $id . ' does not exist.'], 200);
+            return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
     }
 
@@ -88,7 +97,11 @@ class LeaderController extends Controller
     public function decrease($id): JsonResponse
     {
         try {
-            $leader = Leaderboard::findOrFail($id);
+            $leader = Leaderboard::find($id);
+            if (empty($leader->id)) {
+                $message = 'Decreasing failed, No.' . $id . ' does not exist.';
+                return response()->json(['message' => $message], self::NO_FOUND_STATUS_CODE);
+            }
             if ($leader->points > 0) {
                 $leader->points--;
                 $leader->save();
@@ -96,9 +109,9 @@ class LeaderController extends Controller
             } else {
                 $message = "The points of Leader " . $leader->name . " is zero, can not be decreased any more.";
             }
-            return response()->json([$message], 200);
-        } catch (ModelNotFoundException $exception) {
-            return response()->json(['Decreasing failed, No.' . $id . ' does not exist.'], 200);
+            return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], self::NO_FOUND_STATUS_CODE);
         }
     }
 
@@ -109,13 +122,17 @@ class LeaderController extends Controller
     public function delete($id): JsonResponse
     {
         try {
-            $leader = Leaderboard::findOrFail($id);
+            $leader = Leaderboard::find($id);
+            if (empty($leader)) {
+                $message = 'Deleting failed, No.'. $id .' does not exist.';
+                return response()->json(['message' => $message], self::NO_FOUND_STATUS_CODE);
+            }
             $name = $leader->name;
             $leader->delete();
             $message = $name . ' has been deleted from leaderboard.';
-            return response()->json([$message], 200);
-        } catch (ModelNotFoundException $exception) {
-            return response()->json(['Deleting failed, No.'. $id .' does not exist.'], 200);
+            return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], self::NO_FOUND_STATUS_CODE);
         }
     }
 
@@ -131,12 +148,16 @@ class LeaderController extends Controller
             return response()->json([$validation['message']], 200);
         }
         try {
-            $leader = Leaderboard::findOrFail($id);
+            $leader = Leaderboard::find($id);
+            if (empty($leader->id)) {
+                $message = 'Updating failed, No.'. $id .' does not exist.';
+                return response()->json(['message' => $message], self::NO_FOUND_STATUS_CODE);
+            }
             $leader->fill($request->all())->save();
             $message = 'Leader No.' . $id . ' has been updated.';
-            return response()->json([$message], 200);
+            return response()->json([$message], self::SUCCESS_STATUS_CODE);
         } catch(Exception $exception) {
-            return response()->json([$exception->getMessage()], 200);
+            return response()->json([$exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
     }
 
