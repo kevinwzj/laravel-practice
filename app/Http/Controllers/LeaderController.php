@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leaderboard;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use PHPUnit\Exception;
@@ -19,7 +20,7 @@ class LeaderController extends Controller
     const NO_FOUND_STATUS_CODE = 404;
 
     /**
-     * @return Leaderboard[]|\Illuminate\Database\Eloquent\Collection
+     * @return Leaderboard[]|Collection
      */
     public function index()
     {
@@ -38,7 +39,7 @@ class LeaderController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         try {
             return Leaderboard::findOrFail($id);
@@ -64,7 +65,7 @@ class LeaderController extends Controller
             Leaderboard::create($data);
             $message = "Leader " . $data['name'] . " has been created.";
             return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
     }
@@ -83,7 +84,8 @@ class LeaderController extends Controller
             }
             $leader->points++;
             $leader->save();
-            $message = "The points of Leader " . $leader->name . " has been increased by 1, equals to " . $leader->points;
+            $message = "The points of Leader " . $leader->name . " has been increased by 1, equals to "
+                . $leader->points;
             return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
@@ -105,7 +107,8 @@ class LeaderController extends Controller
             if ($leader->points > 0) {
                 $leader->points--;
                 $leader->save();
-                $message = "The points of Leader " . $leader->name . " has been decreased by 1, equals to " . $leader->points;
+                $message = "The points of Leader " . $leader->name . " has been decreased by 1, equals to "
+                    . $leader->points;
             } else {
                 $message = "The points of Leader " . $leader->name . " is zero, can not be decreased any more.";
             }
@@ -156,7 +159,7 @@ class LeaderController extends Controller
             $leader->fill($request->all())->save();
             $message = 'Leader No.' . $id . ' has been updated.';
             return response()->json(['message' => $message], self::SUCCESS_STATUS_CODE);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
     }

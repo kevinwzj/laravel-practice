@@ -12,7 +12,8 @@ class LeaderControllerTest extends TestCase
 
     protected $leader;
 
-    public function setUp() :void{
+    public function setUp() :void
+    {
         parent::setUp();
         $this->leader= $this->app->make('App\Http\Controllers\LeaderController');
     }
@@ -61,12 +62,14 @@ class LeaderControllerTest extends TestCase
         $points = $result['points'] + 1;
         $this->post('/api/user/leaderboard/increase/'.$id)
             ->assertJson([
-                'message' => "The points of Leader " . $requestParams['name'] . " has been increased by 1, equals to " . $points
+                'message' => "The points of Leader " . $requestParams['name'] . " has been increased by 1, equals to "
+                    . $points
             ]);
         $points--;
         $this->post('/api/user/leaderboard/decrease/'.$id)
             ->assertJson([
-                'message' => "The points of Leader " . $requestParams['name'] . " has been decreased by 1, equals to " . $points
+                'message' => "The points of Leader " . $requestParams['name'] . " has been decreased by 1, equals to "
+                    . $points
             ]);
     }
 
