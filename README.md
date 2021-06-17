@@ -151,12 +151,12 @@ php artisan test tests/Feature/Http/Controllers/LeaderControllerTest.php
 ## Main contributions
 
 ```
-Miagraton: database/migrations/2021_06_14_225630_create_leaderboard_table.php
-Route: routes/api.php
-Model: app/Models/Leaderboard.php
-Controller: app/Http/Controllers/LeaderController.php
-Test: tests/Feature/Http/Controllers/LeaderControllerTest.php
-Readme: README.md
+1. Miagraton: database/migrations/2021_06_14_225630_create_leaderboard_table.php
+2. Route: routes/api.php
+3. Model: app/Models/Leaderboard.php
+4. Controller: app/Http/Controllers/LeaderController.php
+5. Test: tests/Feature/Http/Controllers/LeaderControllerTest.php
+6. Readme: README.md
 ```
 
 ## Postman collection
