@@ -39,7 +39,7 @@ class LeaderController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
         try {
             return Leaderboard::findOrFail($id);
