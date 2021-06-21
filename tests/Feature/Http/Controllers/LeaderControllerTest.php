@@ -40,7 +40,7 @@ class LeaderControllerTest extends TestCase
         ];
         $this->post('/api/user/leaderboard', $requestParams)
             ->assertJson([
-                'message' => 'Creation failed, ' . $paramMissing . ' is a required field.'
+                'message' => 'Creation failed: The ' . $paramMissing . ' field is required.'
             ]);
     }
 
@@ -95,7 +95,7 @@ class LeaderControllerTest extends TestCase
     public function testUpdateLeaderSuccessAction()
     {
         $requestParams = [
-            'name'      => 'Nancy',
+            'name'      => 'Howard',
             'age'       => 31,
             'address'   => '1787 156 ST Surrey BC V3A 6S9'
         ];
@@ -106,7 +106,7 @@ class LeaderControllerTest extends TestCase
 
         $id = DB::getPdo()->lastInsertId();
         $updateParams = [
-            'name'      => 'Nancy',
+            'name'      => 'Howard',
             'age'       => 32,
             'points'     => 5,
             'address'   => '1785 156 ST Surrey BC V3A 6S9'

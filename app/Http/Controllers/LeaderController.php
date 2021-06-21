@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use PHPUnit\Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class LeaderController
@@ -55,11 +56,19 @@ class LeaderController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        $data = $request->all();
-        $validation = $this->validateNewLeaderInfo($request->all());
-        if (!$validation['result']) {
-            return response()->json(['message' => $validation['message']], self::BAD_REQUEST_STATUS_CODE);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:leaderboard',
+            'age' => 'required|integer',
+            'address' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()
+                ->json(
+                    ['message' => 'Creation failed: ' . $validator->errors()->first()],
+                    self::BAD_REQUEST_STATUS_CODE
+                );
         }
+        $data = $request->all();
         $data['points'] = 0;
         try {
             Leaderboard::create($data);
@@ -146,9 +155,18 @@ class LeaderController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $validation = $this->validateUpdateLeaderInfo($request->all());
-        if (!$validation['result']) {
-            return response()->json([$validation['message']], 200);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'age' => 'required|integer',
+            'points' => 'required|integer',
+            'address' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()
+                ->json(
+                    ['message' => 'Updated failed: ' . $validator->errors()->first()],
+                    self::BAD_REQUEST_STATUS_CODE
+                );
         }
         try {
             $leader = Leaderboard::find($id);
@@ -162,46 +180,5 @@ class LeaderController extends Controller
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], self::BAD_REQUEST_STATUS_CODE);
         }
-    }
-
-    /**
-     * @param $data
-     * @return array|bool[]
-     */
-    protected function validateNewLeaderInfo($data): array
-    {
-        $keys = ['name', 'age', 'address'];
-        foreach ($keys as $key) {
-            if (!key_exists($key, $data)) {
-                return [
-                    'result' => false,
-                    'message' => 'Creation failed, ' . $key . ' is a required field.'
-                ];
-            }
-        }
-        return [
-            'result' => true
-        ];
-    }
-
-    /**
-     * @param $data
-     * @return array|bool[]
-     */
-    protected function validateUpdateLeaderInfo($data): array
-    {
-        $keys = ['name', 'age', 'points', 'address'];
-        $inputKeys = array_keys($data);
-        foreach ($inputKeys as $key) {
-            if (!in_array($key, $keys)) {
-                return [
-                    'result' => false,
-                    'message' => 'Update failed, ' . $key . ' is not a required field.'
-                ];
-            }
-        }
-        return [
-            'result' => true
-        ];
     }
 }
