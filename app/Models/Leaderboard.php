@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * Class Leaderboard
  * @package App\Models
  */
-class Leaderboard extends Model {
+class Leaderboard extends Model
+{
     /**
      * The database table used by the model.
      *
